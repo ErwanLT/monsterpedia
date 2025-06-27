@@ -14,6 +14,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import fr.eletutour.monster_hunter.models.GameAppearance;
 import fr.eletutour.monster_hunter.models.Monster;
+import fr.eletutour.monster_hunter.models.GameTitle;
 import fr.eletutour.monster_hunter.service.MonstersService;
 import org.springframework.util.CollectionUtils;
 
@@ -84,7 +85,8 @@ public class MonstersView extends VerticalLayout {
                 content.add(card);
             }
 
-            Details gameSection = new Details(game, content);
+            var gameTitle = GameTitle.fromDisplayName(game).get();
+            Details gameSection = new Details(new Image("games/" + gameTitle.getImage(), game), content);
             gameSection.setOpened(false);
             cardLayout.add(gameSection);
         }
