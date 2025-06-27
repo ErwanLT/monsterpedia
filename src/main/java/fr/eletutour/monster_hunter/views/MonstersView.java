@@ -101,12 +101,21 @@ public class MonstersView extends VerticalLayout {
                 CardVariant.LUMO_ELEVATED);
 
         if(!CollectionUtils.isEmpty(monster.getElements())) {
+
             Div elementsDiv = new Div();
+            elementsDiv.getStyle().set("display", "flex");
+            elementsDiv.getStyle().set("gap", "6px");
+            elementsDiv.getStyle().set("justify-content", "center");
+            elementsDiv.getStyle().set("align-items", "center");
+            elementsDiv.getStyle().set("flex-wrap", "wrap");
+            elementsDiv.getStyle().set("max-width", "80px");
+
             for (String element : monster.getElements()) {
                 Image elementIcon = new Image("elements/" + element.toLowerCase() + ".png", element);
-                elementIcon.setHeight(50, Unit.PIXELS);
-                elementsDiv.add(new Div(elementIcon));
+                elementIcon.setHeight(20, Unit.PIXELS);
+                elementsDiv.add(elementIcon);
             }
+
             monsterCard.setHeaderPrefix(elementsDiv);
         }
 

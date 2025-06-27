@@ -8,6 +8,7 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEvent;
@@ -103,12 +104,7 @@ public class MonsterDetailView extends VerticalLayout implements HasUrlParameter
             if(!CollectionUtils.isEmpty(monster.getSubSpecies())) {
                 H3 subSpeciesTitle = new H3("Sous-espèces");
                 add(subSpeciesTitle);
-                Div subSpeciesDiv = new Div();
-                subSpeciesDiv.getStyle().set("display", "flex");
-                subSpeciesDiv.getStyle().set("gap", "12px");
-                subSpeciesDiv.getStyle().set("justify-content", "center");
-                subSpeciesDiv.getStyle().set("align-items", "center");
-                subSpeciesDiv.getStyle().set("flex-wrap", "wrap");
+                HorizontalLayout subSpeciesDiv = new HorizontalLayout();
 
                 for (String subSpecies : monster.getSubSpecies()) {
                     // Cherche le monstre correspondant dans allMonsters
@@ -127,8 +123,15 @@ public class MonsterDetailView extends VerticalLayout implements HasUrlParameter
                             .orElse(null);
                         if (latest != null) {
                             Image subSpeciesImage = new Image("icons/" + latest.getImage(), subSpecies);
+                            NativeLabel nativeLabel = new NativeLabel(subSpecies);
                             subSpeciesImage.setWidth("120px");
-                            subSpeciesDiv.add(subSpeciesImage);
+                            // Ajout du click listener pour naviguer vers la page de détail de la sous-espèce
+                            Monster finalSubMonster = subMonster;
+                            subSpeciesImage.addClickListener(e -> {
+                                getUI().ifPresent(ui -> ui.navigate(MonsterDetailView.class, finalSubMonster.getId().getOid()));
+                            });
+                            VerticalLayout subSpeciesLayout = new VerticalLayout(subSpeciesImage, nativeLabel);
+                            subSpeciesDiv.add(subSpeciesLayout);
                         }
                     }
                 }
