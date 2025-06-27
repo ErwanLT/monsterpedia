@@ -1,7 +1,6 @@
 package fr.eletutour.monster_hunter.views;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
@@ -19,6 +18,7 @@ import fr.eletutour.monster_hunter.models.GameAppearance;
 import fr.eletutour.monster_hunter.models.GameTitle;
 import fr.eletutour.monster_hunter.models.Monster;
 import fr.eletutour.monster_hunter.service.MonstersService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Comparator;
@@ -122,15 +122,7 @@ public class MonsterDetailView extends VerticalLayout implements HasUrlParameter
                             })
                             .orElse(null);
                         if (latest != null) {
-                            Image subSpeciesImage = new Image("icons/" + latest.getImage(), subSpecies);
-                            NativeLabel nativeLabel = new NativeLabel(subSpecies);
-                            subSpeciesImage.setWidth("120px");
-                            // Ajout du click listener pour naviguer vers la page de détail de la sous-espèce
-                            Monster finalSubMonster = subMonster;
-                            subSpeciesImage.addClickListener(e -> {
-                                getUI().ifPresent(ui -> ui.navigate(MonsterDetailView.class, finalSubMonster.getId().getOid()));
-                            });
-                            VerticalLayout subSpeciesLayout = new VerticalLayout(subSpeciesImage, nativeLabel);
+                            VerticalLayout subSpeciesLayout = subspeciesInfo(subSpecies, latest, subMonster);
                             subSpeciesDiv.add(subSpeciesLayout);
                         }
                     }
@@ -140,6 +132,18 @@ public class MonsterDetailView extends VerticalLayout implements HasUrlParameter
         } else {
             add(new H1("Monstre introuvable"));
         }
+    }
+
+    @NotNull
+    private VerticalLayout subspeciesInfo(String subSpecies, GameAppearance latest, Monster subMonster) {
+        Image subSpeciesImage = new Image("icons/" + latest.getImage(), subSpecies);
+        NativeLabel nativeLabel = new NativeLabel(subSpecies);
+        subSpeciesImage.setWidth("120px");
+        // Ajout du click listener pour naviguer vers la page de détail de la sous-espèce
+        subSpeciesImage.addClickListener(e -> {
+            getUI().ifPresent(ui -> ui.navigate(MonsterDetailView.class, subMonster.getId().getOid()));
+        });
+        return new VerticalLayout(subSpeciesImage, nativeLabel);
     }
 
     private Component createElementInfoBok(List<String> elements) {
