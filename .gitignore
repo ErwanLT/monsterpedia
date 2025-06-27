@@ -35,6 +35,3 @@ build/
 /src/main/frontend/generated/
 /src/main/frontend/index.html
 /.mvn/
-/src/main/resources/static/ailments/*
-/src/main/resources/static/elements/*
-/src/main/resources/static/icons/*
